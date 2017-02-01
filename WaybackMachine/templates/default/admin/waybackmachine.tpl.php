@@ -52,22 +52,3 @@ if (!empty(\Idno\Core\site()->config()->waybackmachine)) {
         </form>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-
-	if ($('#enabled').is(':checked')) {
-	    $('#savebookmarks').prop('disabled', false);
-	} else {
-	    $('#savebookmarks').prop('disabled', true);
-	}
-
-	if ($('#enabled').change(function () {
-	    if ($('#enabled').is(':checked')) {
-		$('#savebookmarks').prop('disabled', false);
-	    } else {
-		$('#savebookmarks').prop('disabled', true);
-	    }
-	}))
-	    ;
-    });
-</script>

@@ -30,16 +30,17 @@ namespace IdnoPlugins\WaybackMachine {
 		    if (in_array(get_class($object), \Idno\Common\ContentType::getRegisteredClasses())) {
 			try {
 
+			    // See if we need to save the new item
 			    if ($enabled) {
 				\Idno\Core\Idno::site()->logging()->debug("Archiving object URL");
 				Client::saveURL($object->getUrl());
-
-				// See if this is a saved link
-				if ($savebookmarks) {
-				    if (filter_var($object->body, FILTER_VALIDATE_URL)) {
-					\Idno\Core\Idno::site()->logging()->debug("Contact body appears to be a URL");
-					Client::saveURL($object->body);
-				    }
+			    }
+			    
+			    // See if this is a saved link
+			    if ($savebookmarks) {
+				if (filter_var($object->body, FILTER_VALIDATE_URL)) {
+				    \Idno\Core\Idno::site()->logging()->debug("Contact body appears to be a URL");
+				    Client::saveURL($object->body);
 				}
 			    }
 			} catch (\Exception $e) {
