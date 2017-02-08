@@ -11,6 +11,21 @@ namespace IdnoPlugins\WaybackMachine {
 	    // Add menu items to account & administration screens
 	    \Idno\Core\site()->template()->extendTemplate('admin/menu/items', 'admin/WaybackMachine/menu');
 	}
+	
+	/**
+	 * Return an array of urls in text, or an empty string
+	 * @param type $text
+	 */
+	private function getUrlsFromText($text) {
+	    $return = [];
+
+            if (preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $text, $match)) { // regex from wordpress 
+		
+                $return = $match[0];
+            }
+
+            return $return;
+	}
 
 	function registerEventHooks() {
 
@@ -28,23 +43,39 @@ namespace IdnoPlugins\WaybackMachine {
 		if (!empty($object)) {
 
 		    if (in_array(get_class($object), \Idno\Common\ContentType::getRegisteredClasses())) {
-			try {
 
-			    // See if we need to save the new item
-			    if ($enabled) {
-				\Idno\Core\Idno::site()->logging()->debug("Archiving object URL");
-				Client::saveURL($object->getUrl());
-			    }
+			$urls = [];
+
+			// See if we need to save the new item
+			if ($enabled) {
+			    \Idno\Core\Idno::site()->logging()->debug("Archiving object URL");
+			    $urls[] = $object->getUrl();
+			}
+
+			// See if this is a saved link
+			if ($savebookmarks) {
 			    
-			    // See if this is a saved link
-			    if ($savebookmarks) {
-				if (filter_var($object->body, FILTER_VALIDATE_URL)) {
-				    \Idno\Core\Idno::site()->logging()->debug("Contact body appears to be a URL");
-				    Client::saveURL($object->body);
+			    \Idno\Core\Idno::site()->logging()->debug("Looking for URLS in body and description");
+			    
+			    // Now see if the body or description contains urls
+			    if (!empty($object->body))
+				$urls = array_merge($urls, $this->getUrlsFromText($object->body));
+				    
+			    if (!empty($object->description))
+				$urls = array_merge($urls, $this->getUrlsFromText($object->description));
+			}
+
+			if (!empty($urls)) {
+			    
+			    $urls = array_unique($urls);
+			    
+			    foreach ($urls as $url) {
+				try {
+				    Client::saveURL($url);
+				} catch (\Exception $e) {
+				    \Idno\Core\site()->logging()->error($e->getMessage());
 				}
 			    }
-			} catch (\Exception $e) {
-			    \Idno\Core\site()->logging()->error($e->getMessage());
 			}
 		    }
 		}
