@@ -34,7 +34,7 @@ if (!empty(\Idno\Core\site()->config()->waybackmachine)) {
 		    <input type="checkbox" id="enabled" placeholder="Enable archive.org" class="form-control"  name="enabled" value="true" <?= $enabled ? 'checked' : ''; ?> ></p>
 
 
-		<p><label class="control-label" for="name">Save bookmarked links</label><br/>
+		<p><label class="control-label" for="name">Save bookmarked links, and links in a post body</label><br/>
 
 		    <input type="checkbox" id="savebookmarks" placeholder="Save bookmarks" class="form-control" name="savebookmarks" value="true" <?= $savebookmarks ? 'checked' : ''; ?> ></p>
 
