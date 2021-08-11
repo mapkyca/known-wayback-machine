@@ -1,0 +1,25 @@
+{
+    "name": "mapkyca/known-wayback-machine",
+    "description": "Wayback machine support for Known",
+    "type": "known-plugin",
+    "license": "GPL-2.0",
+    "version": "1.0.1",
+    "homepage": "https://www.marcus-povey.co.uk",
+    "keywords": [
+        "known",
+        "plugin",
+        "waybackmachine"
+    ],
+    "authors": [
+        {
+            "name": "Marcus Povey",
+            "email": "marcus@marcus-povey.co.uk"
+        }
+    ],
+    "require": {
+        "composer/installers": "^2.0"
+    },
+    "extra": {
+        "installer-name": "WaybackMachine"
+    }
+}
